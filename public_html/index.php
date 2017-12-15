@@ -1,17 +1,21 @@
 <?php
 
+use Application\Components\Router;
+
 // Front Controller
 
-// 1. Settings
+// Settings
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// 2. Including system files
+// Including system files
 define('ROOT', __DIR__ . '/../');
-require_once(ROOT . 'Components/Router.php');
 
-// 3. Connecting to DB
+//require_once(ROOT . 'Components/Router.php');
+//require_once(ROOT . 'Components/DB.php');
 
-// 4. Router's call
+require_once(ROOT . 'config/autoload.php');
+
+// Router's call
 $router = new Router;
 $router->run();

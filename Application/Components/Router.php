@@ -1,5 +1,7 @@
 <?php
 
+namespace Application\Components;
+
 class Router
 {
     private $routes;
@@ -28,21 +30,26 @@ class Router
 
             if (preg_match("~^$uriPattern(?![\w/])~", $uri)) {
 
-                // If query string exists in routes.php identify controller and actions
-                $segments = explode('/', $path);
+                // Get internal route
+                $internalRoute = preg_replace("~^$uriPattern(?![\w/])~", $path, $uri);
 
-                $controllerName = ucfirst(array_shift($segments)) . 'Controller';
+                // If query string exists in routes.php identify controller and actions
+                $segments = explode('/', $internalRoute);
+
+                $controllerName = 'Application\Controller\\' . ucfirst(array_shift($segments)) . 'Controller';
                 $actionName = array_shift($segments) . 'Action';
 
+                $parameters = $segments;
+
                 // Include controller class file
-                $controllerFile = ROOT . 'Controller/' . $controllerName . '.php';
+                $controllerFile = ROOT . 'Application/Controller/' . $controllerName . '.php';
                 if (is_file($controllerFile)) {
                     include_once($controllerFile);
                 }
 
                 // Create object, call method (action)
                 $controllerObject = new $controllerName;
-                $result = $controllerObject->$actionName();
+                $result = call_user_func_array([$controllerObject, $actionName], $parameters);
 
                 if ($result != null) {
                     break;

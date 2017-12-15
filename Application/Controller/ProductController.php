@@ -1,5 +1,7 @@
 <?php
 
+namespace Application\Controller;
+
 class ProductController
 {
     public function listAction()
