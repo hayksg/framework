@@ -4,7 +4,7 @@ namespace Application\Model;
 
 use Application\Components\Model;
 
-class Product extends Model
+class Article extends Model
 {
-    public static $tableName = 'product';
+    public static $tableName = 'article';
 }

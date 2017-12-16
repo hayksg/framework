@@ -3,22 +3,20 @@
 namespace Application\Controller;
 
 use Application\Model\News;
+use Application\Components\View;
+use Application\Components\FunctionsLibrary as FL;
 
 class NewsController
 {
     public function indexAction()
     {
-        $allNews = News::getAll();
-        require_once(ROOT . 'Application/View/news/index.php');
-
+        echo __METHOD__;
         return true;
     }
 
-    public function viewAction($id)
+    public function viewAction()
     {
-        $oneNews = News::getOneById((int)$id);
-        require_once(ROOT . 'Application/View/news/view.php');
-
+        echo __METHOD__;
         return true;
     }
 }
