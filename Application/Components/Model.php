@@ -22,13 +22,17 @@ class Model
 
     public static function getOneById($id)
     {
-
         $className = get_called_class();
+        $primaryKeyName = self::getPrimaryKeyName();
 
         DB::setClassName($className);
         $db = DB::getConnection();
 
-        $sql = "SELECT * FROM " . static::$tableName . " WHERE id = :id";
+        $sql  = "SELECT * FROM ";
+        $sql .=  static::$tableName;
+        $sql .= " WHERE ";
+        $sql .= $primaryKeyName . ' = :' . $primaryKeyName;
+
         $stmt = $db->prepare($sql);
         $stmt->bindParam('id', $id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -76,7 +80,7 @@ class Model
         }
     }
 
-    public function getPrimaryKeyName()
+    private static function getPrimaryKeyName()
     {
         $sql = "SHOW KEYS FROM " . static::$tableName . " WHERE Key_name = 'PRIMARY'";
         $db = DB::getConnection();
@@ -89,7 +93,7 @@ class Model
 
     protected function update()
     {
-        $primaryKeyName = $this->getPrimaryKeyName();
+        $primaryKeyName = self::getPrimaryKeyName();
 
         $params = [];
         $newData = [];
@@ -124,5 +128,18 @@ class Model
         } else {
             return $this->add();
         }
+    }
+
+    public function delete()
+    {
+        $primaryKeyName = self::getPrimaryKeyName();
+        $id = (int)$this->data[$primaryKeyName];
+
+        $sql  = "DELETE FROM ";
+        $sql .= static::$tableName;
+        $sql .= " WHERE ";
+        $sql .= $primaryKeyName . ' = :' . $primaryKeyName;
+
+        return DB::persist($sql, [$primaryKeyName => $id]);
     }
 }

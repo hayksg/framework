@@ -43,12 +43,10 @@ class ArticleController
         if ($article->save()) {
             FL::redirectTo('/article');
         }
-
     }
 
     public function editAction($id)
     {
-
         $article = Article::getOneById((int)$id);
 
         $article->fieldsForUpdate(['content', 'short_content', 'title']);
@@ -57,6 +55,15 @@ class ArticleController
         $article->title = 'FOOOO111';
 
         if ($article->save()) {
+            FL::redirectTo('/article');
+        }
+    }
+
+    public function deleteAction($id)
+    {
+        $article = Article::getOneById((int)$id);
+
+        if ($article->delete()) {
             FL::redirectTo('/article');
         }
     }

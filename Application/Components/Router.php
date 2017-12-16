@@ -49,10 +49,19 @@ class Router
 
                 // Create object, call method (action)
                 $controllerObject = new $controllerName;
-                $result = call_user_func_array([$controllerObject, $actionName], $parameters);
+                if (is_object($controllerObject)) {
+                    if (method_exists($controllerObject, $actionName)) {
+                        $result = call_user_func_array([$controllerObject, $actionName], $parameters);
 
-                if ($result != null) {
-                    break;
+                        if ($result != null) {
+                            break;
+                        }
+                    }
+                    else {
+                        throw new \Exception('Wrong route');
+                    }
+                } else {
+                    throw new \Exception('Wrong route');
                 }
             }
         }

@@ -21,4 +21,9 @@ class FunctionsLibrary
     {
         return abs((int)$int);
     }
+
+    public static function catchAllExceptions($e)
+    {
+        echo $e->getMessage();
+    }
 }
